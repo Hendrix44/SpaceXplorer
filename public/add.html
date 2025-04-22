@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ajouter planète</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header><h1>Ajouter une planète</h1></header>
+<main>
+  <form action="/api/planets" method="POST" enctype="multipart/form-data">
+    <input name="name" placeholder="Nom" required />
+    <input name="type" placeholder="Type" required />
+    <input type="number" name="distance" placeholder="Distance" step="0.1" required />
+    <input type="number" name="temperature" placeholder="Température" required />
+    <select name="habitable">
+      <option value="0">Non habitable</option>
+      <option value="1">Habitable</option>
+    </select>
+    <textarea name="description" placeholder="Description..."></textarea>
+    <input type="date" name="discovery_date" required />
+    <input type="file" name="planetImage" accept="image/*" />
+    <button type="submit">Ajouter</button>
+  </form>
+</main>
+</body>
+</html>
