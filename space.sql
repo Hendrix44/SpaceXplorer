@@ -36,9 +36,9 @@ CREATE TABLE missions (
 INSERT INTO planets (name, type, distance, temperature, habitable, description, image_url, discovery_date)
 VALUES 
 ('Aetheria', 'habitable', 42.7, 22.3, TRUE, 'Une planète luxuriante propice à la vie humaine.', '/uploads/aetheria.jpg', '2024-03-15'),
-('Voltaris', 'gazeuse', 230.5, -160.0, FALSE, 'Géante gazeuse au cœur d\'orages électriques.', '/uploads/voltaris.jpg', 2023-11-02) ;
+('Voltaris', 'gazeuse', 230.5, -160.0, FALSE, 'Géante gazeuse au cœur d\'orages électriques.', '/uploads/voltaris.jpg'," 2023-11-02") ;
 
--- Données pour la table explorers
+
 INSERT INTO explorers (name, speciality, experience, email)
 VALUES
     ('Nova Astra', 'Biologiste spatial', 5, 'nova.astra@spacexplorer.com'),

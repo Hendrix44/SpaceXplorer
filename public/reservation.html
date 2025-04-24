@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Réserver une mission</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header>
+    <h1>Réservation de mission</h1>
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="catalogue.html">Catalogue</a>
+    </nav>
+</header>
+
+<main>
+    <!-- Section de création de mission -->
+    <section id="createMission">
+        <h2>Créer une Mission</h2>
+        <form id="reservationForm">
+            <label for="planet">Planète :</label>
+            <select id="planet" name="planet_id" required></select>
+
+            <label for="explorer">ID Explorateur :</label>
+            <input type="number" id="explorer" name="explorer_id" required />
+
+            <label for="departure_date">Date de départ :</label>
+            <input type="date" id="departure_date" name="departure_date" required />
+
+            <label for="duration">Durée (jours) :</label>
+            <input type="number" id="duration" name="duration" required />
+
+            <button type="submit">Réserver</button>
+        </form>
+    </section>
+
+    <!-- Section d'affichage des missions existantes (cachée au départ) -->
+    <section id="missionsList" style="display: none;">
+        <h2>Liste des Missions Réservées</h2>
+        <div id="missionsContainer">
+            <!-- Les missions seront affichées ici -->
+        </div>
+    </section>
+
+    <!-- Bouton pour afficher/masquer les missions -->
+    <button id="toggleMissionsBtn">Afficher les missions</button>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const reservationForm = document.getElementById('reservationForm');
+        const planetSelect = document.getElementById('planet');
+        const missionsContainer = document.getElementById('missionsContainer');
+        const toggleMissionsBtn = document.getElementById('toggleMissionsBtn');
+        const missionsListSection = document.getElementById('missionsList');
+
+        // Charger les planètes dans le <select>
+        fetch('/api/planets')
+            .then(res => res.json())
+            .then(planets => {
+                planets.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p.id;
+                    option.textContent = p.name;
+                    planetSelect.appendChild(option);
+                });
+            });
+
+        // Gérer la soumission du formulaire de création de mission
+        reservationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                planet_id: reservationForm.planet_id.value,
+                explorer_id: reservationForm.explorer_id.value,
+                departure_date: reservationForm.departure_date.value,
+                duration: reservationForm.duration.value
+            };
+
+            const response = await fetch('/api/missions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('🚀 Mission réservée avec succès !');
+                reservationForm.reset();
+            } else {
+                const error = await response.text();
+                alert('❌ Erreur : ' + error);
+            }
+        });
+
+        // Fonction pour charger toutes les missions existantes
+        function loadMissions() {
+            fetch('/api/missions')
+                .then(res => res.json())
+                .then(missions => {
+                    if (missions.length === 0) {
+                        missionsContainer.innerHTML = '<p>Aucune mission réservée pour le moment.</p>';
+                        return;
+                    }
+
+                    missionsContainer.innerHTML = missions.map(mission => {
+                        return `
+                            <div class="mission-card">
+                                <h3>Mission ID: ${mission.id}</h3>
+                                <p><strong>Planète :</strong> ${mission.planet_id}</p>
+                                <p><strong>Explorateur ID :</strong> ${mission.explorer_id}</p>
+                                <p><strong>Date de départ :</strong> ${mission.departure_date}</p>
+                                <p><strong>Durée :</strong> ${mission.duration} jours</p>
+                                <p><strong>Status :</strong> ${mission.status}</p>
+                            </div>
+                        `;
+                    }).join('');
+                })
+                .catch(err => {
+                    missionsContainer.innerHTML = '<p>Erreur de récupération des missions.</p>';
+                    console.error(err);
+                });
+        }
+
+        // Fonction pour afficher ou masquer les missions
+        toggleMissionsBtn.addEventListener('click', () => {
+            const isVisible = missionsListSection.style.display === 'block';
+            if (isVisible) {
+                // Cacher la section des missions
+                missionsListSection.style.display = 'none';
+                toggleMissionsBtn.textContent = 'Afficher les missions';  // Modifier le texte du bouton
+            } else {
+                // Afficher la section des missions
+                missionsListSection.style.display = 'block';
+                toggleMissionsBtn.textContent = 'Masquer les missions';  // Modifier le texte du bouton
+                loadMissions();  // Charger les missions
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

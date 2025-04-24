@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ajouter une Planète</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/form.js"></script>
+
+</head>
+<body>
+  <header>
+    <h1>Ajouter une Planète</h1>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="catalogue.html">Catalogue</a>
+      <a href="form.html">Ajouter</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="planetForm" enctype="multipart/form-data">
+      <input type="text" name="name" placeholder="Nom" required />
+      <input type="text" name="type" placeholder="Type" required />
+      <input type="number" name="distance" placeholder="Distance (AL)" required />
+      <input type="number" name="temperature" placeholder="Température (°C)" required />
+      <label><input type="checkbox" name="habitable" /> Habitable</label>
+      <textarea name="description" placeholder="Description..."></textarea>
+      <input type="date" name="discovery_date" />
+      <input type="file" name="planetImage" accept="image/*" required />
+      <button type="submit">Ajouter</button>
+    </form>
+  </main>
+
+  <script>
+    document.getElementById('planetForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      const response = await fetch('/upload', {
+        method: 'POST',
+        body: data
+      });
+      const result = await response.json();
+      alert("Image uploadée avec succès : " + result.imageUrl);
+    });
+  </script>
+</body>
+</html>

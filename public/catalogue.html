@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catalogue des planètes</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Catalogue</h1>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="catalogue.html">Catalogue</a>
+      <a href="form.html">Ajouter</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="filters">
+      <label for="type">Type :</label>
+      <select id="type">
+        <option value="">Tous</option>
+        <option value="rocheuse">Rocheuse</option>
+        <option value="gazeuse">Gazeuse</option>
+        <option value="habitable">Habitable</option>
+      </select>
+    </section>
+
+    <section id="planetList" class="planet-list">
+      <!-- Planètes chargées dynamiquement -->
+    </section>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
